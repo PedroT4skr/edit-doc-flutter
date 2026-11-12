@@ -161,9 +161,17 @@ void main() {
       expect(docsRecarregado.documentos.first.titulo, 'Nota Persistente');
     });
 
-    test('BancoLocalService impede cadastro duplicado', () async {
+    test('BancoLocalService autentica conta demo e impede cadastro duplicado',
+        () async {
       final BancoLocalService banco = BancoLocalService();
       await banco.garantirUsuarioDemo();
+      final Usuario? demo = await banco.autenticar(
+        'aluno@editdoc.com',
+        '123456',
+      );
+      expect(demo, isNotNull);
+      expect(demo?.email, 'aluno@editdoc.com');
+
       final Usuario? duplicado = await banco.cadastrarUsuario(
         nome: 'Duplicado',
         email: 'aluno@editdoc.com',
